@@ -107,6 +107,28 @@ export function rotationAxisAngle(axis: Vec3, radians: number): Mat4 {
   ]);
 }
 
+/**
+ * A matrix reflecting points across the plane through the origin with
+ * (not necessarily unit) normal `normal` — the Householder reflection
+ * `I - 2 * n * nᵀ`. Reflections have determinant `-1`.
+ */
+export function reflection(normal: Vec3): Mat4 {
+  const len = Math.hypot(normal.x, normal.y, normal.z);
+  if (len <= EPSILON) {
+    return IDENTITY;
+  }
+  const x = normal.x / len;
+  const y = normal.y / len;
+  const z = normal.z / len;
+
+  return mat4([
+    1 - 2 * x * x, -2 * x * y, -2 * x * z, 0,
+    -2 * x * y, 1 - 2 * y * y, -2 * y * z, 0,
+    -2 * x * z, -2 * y * z, 1 - 2 * z * z, 0,
+    0, 0, 0, 1,
+  ]);
+}
+
 /** The matrix product `a * b` (i.e. "apply `b`, then `a`" to a point). */
 export function multiply(a: Mat4, b: Mat4): Mat4 {
   const [
@@ -209,11 +231,8 @@ export function transpose(m: Mat4): Mat4 {
   ]);
 }
 
-/**
- * The inverse of `m`, or `null` if `m` is singular (not invertible within
- * floating-point tolerance).
- */
-export function invert(m: Mat4): Mat4 | null {
+/** The 12 minors shared by `determinant` and `invert`'s cofactor expansion. */
+function minors(m: Mat4) {
   const [
     m00,
     m01,
@@ -248,6 +267,31 @@ export function invert(m: Mat4): Mat4 | null {
 
   const det =
     b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+
+  return {
+    m00, m01, m02, m03, m10, m11, m12, m13,
+    m20, m21, m22, m23, m30, m31, m32, m33,
+    b00, b01, b02, b03, b04, b05, b06, b07, b08, b09, b10, b11,
+    det,
+  };
+}
+
+/** The determinant of `m`. */
+export function determinant(m: Mat4): number {
+  return minors(m).det;
+}
+
+/**
+ * The inverse of `m`, or `null` if `m` is singular (not invertible within
+ * floating-point tolerance).
+ */
+export function invert(m: Mat4): Mat4 | null {
+  const {
+    m00, m01, m02, m03, m10, m11, m12, m13,
+    m20, m21, m22, m23, m30, m31, m32, m33,
+    b00, b01, b02, b03, b04, b05, b06, b07, b08, b09, b10, b11,
+    det,
+  } = minors(m);
 
   if (Math.abs(det) <= EPSILON) {
     return null;

@@ -85,3 +85,61 @@ describe('transpose', () => {
     expect(Mat4.equals(Mat4.transpose(Mat4.transpose(m)), m)).toBe(true);
   });
 });
+
+describe('determinant', () => {
+  test('is 1 for the identity', () => {
+    expect(Mat4.determinant(Mat4.IDENTITY)).toBeCloseTo(1);
+  });
+
+  test('is the product of the scale factors for a scaling matrix', () => {
+    const m = Mat4.scaling(Vec3.vec3(2, 3, 4));
+    expect(Mat4.determinant(m)).toBeCloseTo(24);
+  });
+
+  test('is 1 for a pure rotation', () => {
+    const m = Mat4.rotationAxisAngle(Vec3.vec3(1, 1, 1), 0.9);
+    expect(Mat4.determinant(m)).toBeCloseTo(1);
+  });
+
+  test('is 0 for a singular matrix', () => {
+    expect(Mat4.determinant(Mat4.scaling(Vec3.vec3(1, 0, 1)))).toBeCloseTo(0);
+  });
+
+  test('is unaffected by translation', () => {
+    const m = Mat4.multiply(
+      Mat4.translation(Vec3.vec3(5, -3, 2)),
+      Mat4.scaling(Vec3.vec3(2, 2, 2)),
+    );
+    expect(Mat4.determinant(m)).toBeCloseTo(8);
+  });
+});
+
+describe('reflection', () => {
+  test('has determinant -1', () => {
+    const m = Mat4.reflection(Vec3.vec3(0, 0, 1));
+    expect(Mat4.determinant(m)).toBeCloseTo(-1);
+  });
+
+  test('negates the component along the normal, preserves the rest', () => {
+    const m = Mat4.reflection(Vec3.vec3(0, 0, 1));
+    const p = Mat4.transformPoint(m, Vec3.vec3(3, 4, 5));
+    expect(Vec3.equals(p, Vec3.vec3(3, 4, -5))).toBe(true);
+  });
+
+  test('leaves points on the mirror plane unchanged', () => {
+    const m = Mat4.reflection(Vec3.vec3(1, 0, 0));
+    const p = Mat4.transformPoint(m, Vec3.vec3(0, 7, -2));
+    expect(Vec3.equals(p, Vec3.vec3(0, 7, -2))).toBe(true);
+  });
+
+  test('applying it twice is the identity', () => {
+    const m = Mat4.reflection(Vec3.vec3(1, 1, 0));
+    expect(Mat4.equals(Mat4.multiply(m, m), Mat4.IDENTITY)).toBe(true);
+  });
+
+  test('accepts a non-unit normal', () => {
+    const m = Mat4.reflection(Vec3.vec3(0, 0, 5));
+    const p = Mat4.transformPoint(m, Vec3.vec3(1, 2, 3));
+    expect(Vec3.equals(p, Vec3.vec3(1, 2, -3))).toBe(true);
+  });
+});
