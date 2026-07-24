@@ -10,3 +10,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Project scaffolding: `package.json`, `tsconfig.json`, ESLint + Prettier config, `bun test` setup, and GitHub Actions CI (typecheck, lint, test, build on PRs into `dev`/`staging`/`release`/`main`).
 - README skeleton sections for Prerequisites, Installation, and Usage.
+- Internal math kernel (`src/math`): `Vec3` and `Mat4` (column-major) with the operations needed for later primitives, transforms, and CSG (add/sub/cross/dot/normalize, matrix compose/invert/transpose, point/direction transforms), plus shared epsilon-tolerance utilities. Not yet part of the public API.
