@@ -6,23 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-07-24
+
+The first published release: primitives, transforms, and STL export.
+
 ### Added
 
-- Project scaffolding: `package.json`, `tsconfig.json`, ESLint + Prettier config, `bun test` setup, and GitHub Actions CI (typecheck, lint, test, build on PRs into `dev`/`staging`/`release`/`main`).
-- README skeleton sections for Prerequisites, Installation, and Usage.
-- Internal math kernel (`src/math`): `Vec3` and `Mat4` (column-major) with the operations needed for later primitives, transforms, and CSG (add/sub/cross/dot/normalize, matrix compose/invert/transpose, point/direction transforms), plus shared epsilon-tolerance utilities. Not yet part of the public API.
-- Internal mesh data structure (`src/geometry`): `Plane`, `Vertex`, `Polygon` (planar, convex, arbitrary vertex count — kept untriangulated so the future CSG engine can split it directly), `Solid` (a polygon collection, and the anchor point for chainable transforms), and `triangulate` (fan-triangulation deferred to STL-export time). Not yet part of the public API.
-- Shared test-only geometry assertions (`src/testing/solid-assertions.ts`): `signedVolume` (divergence-theorem volume check), `averageVertexPosition`, and `hasOutwardNormals`, for verifying primitive/transform/CSG correctness. Excluded from the published package.
-- `cube` primitive (`src/primitives/cube.ts`): builds an axis-aligned box `Solid` from a scalar or `Vec3` size, with an optional `center` flag matching OpenSCAD's `cube()`.
-- `polyhedron` primitive (`src/primitives/polyhedron.ts`): builds an arbitrary-mesh `Solid` from a flat list of points and a list of faces (index lists into `points`), the raw escape hatch for geometry with no dedicated primitive. Validates that every face has at least 3 indices and that all indices are in bounds; expects faces wound counter-clockwise from outside, the opposite of raw OpenSCAD `.scad` `polyhedron()` data.
-- `sphere(r, options?)` primitive (`src/primitives/sphere.ts`): a UV-sphere of radius `r` centered at the origin, tessellated entirely from triangles (band quads split in two) so every `Polygon` stays exactly planar, with `options.fn` (default `32`) controlling longitude segment count and latitude ring count (`fn / 2`, minimum 2).
-- `cylinder` primitive (`src/primitives/cylinder.ts`): builds a cylinder, cone, or frustum solid matching OpenSCAD's `cylinder()` semantics (`r`/`r1`/`r2`, `h`, `center`, `fn`), with triangulated side faces (kept exactly planar even when tapered) and flat n-gon top/bottom caps.
-- Chainable transforms on `Solid` (`src/geometry/solid.ts`): `translate`, `rotate` (Euler angles, X/Y/Z order), `rotateAxisAngle`, `scale` (uniform or per-axis), `mirror`, and `multmatrix` (arbitrary 4x4 transform). Normals transform by the matrix's inverse-transpose for correctness under non-uniform scale; winding is automatically reversed for any transform with negative determinant (mirror, or an odd number of reflections via `multmatrix`) so outward-facing geometry stays outward-facing. Also adds `Mat4.determinant` and `Mat4.reflection` to the math kernel. Not yet part of the public API.
-- STL triangulation helper (`src/io/triangulate-solid.ts`): flattens a `Solid` into per-facet STL triangles (fan-triangulating each polygon and recomputing each triangle's own normal via the right-hand rule), the shared foundation the upcoming binary/ASCII STL writers build on. Not yet part of the public API.
-- `isManifold` diagnostic (`src/io/manifold-check.ts`): checks whether a `Solid` is watertight by triangulating it and verifying every directed edge occurs exactly once with its reverse-directed counterpart occurring exactly once elsewhere in the mesh, catching both holes and winding inconsistencies. Not yet part of the public API.
-- ASCII STL writer (`src/io/stl-ascii.ts`): `toASCIISTL(solid, name?)` serializes a `Solid` to the standard ASCII STL text format (`solid`/`facet normal`/`outer loop`/`vertex`/`endloop`/`endfacet`/`endsolid`) via `triangulateSolid`, with coordinates formatted as fixed-point decimals (six digits, matching float32 precision) that never fall back to scientific notation. Not yet part of the public API.
-- Binary STL writer (`src/io/stl-binary.ts`): `toBinarySTL(solid)` serializes a `Solid` to the binary STL format (80-byte header, little-endian `uint32` triangle count, then a 50-byte little-endian record per triangle — facet normal, three vertex positions, and a zero attribute byte count), built entirely on `ArrayBuffer`/`DataView` so it works in browsers. Not yet part of the public API.
+- Primitives: `cube`, `sphere`, `cylinder`, and `polyhedron` (the arbitrary-mesh escape hatch), matching OpenSCAD's semantics — see each function's docs for its options.
+- Chainable transforms on `Solid`: `translate`, `rotate` (Euler angles), `rotateAxisAngle`, `scale` (uniform or per-axis), `mirror`, and `multmatrix` (arbitrary 4x4 transform). Normals transform correctly under non-uniform scale, and winding is automatically corrected for any handedness-flipping transform (e.g. `mirror`).
+- STL export: `toBinarySTL` and `toASCIISTL`, plus `isManifold` for checking a solid is watertight before exporting, and `triangulateSolid` for consumers who want raw per-facet triangle data directly (e.g. to feed a WebGL renderer).
+- The full `Vec3`/`Mat4` math toolkit and the underlying `Vertex`/`Polygon`/`Plane`/`Solid` geometry types, for consumers who want to inspect or hand-build geometry beyond what the primitives above cover.
+- Project scaffolding: TypeScript build/typecheck/lint/test pipeline (`bun`-based) and GitHub Actions CI.
+
+### Fixed
+
+- Removed `"sideEffects": false` from `package.json` — it was causing `bun build` to silently tree-shake away the entire bundled implementation behind the public barrel export (`src/index.ts`), shipping an empty package. Caught before publishing via an end-to-end smoke test against the actual built `dist/index.js`.
 
 ### Changed
 
-- Pinned `prettier` to the exact installed version (`3.9.6`, was `^3.4.2`) and reformatted the two files the version drift affected, so `bun run format` no longer produces unrelated diffs.
+- Pinned `prettier` to the exact installed version (`3.9.6`, was `^3.4.2`) so `bun run format` no longer produces unrelated diffs from version drift.
