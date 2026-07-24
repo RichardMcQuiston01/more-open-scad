@@ -2,10 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import * as Mat4 from '../math/mat4';
 import * as Vec3 from '../math/vec3';
 import { cube } from '../primitives/cube';
-import {
-  hasOutwardNormals,
-  signedVolume,
-} from '../testing/solid-assertions';
+import { hasOutwardNormals, signedVolume } from '../testing/solid-assertions';
 import * as Polygon from './polygon';
 import { Solid } from './solid';
 import * as Vertex from './vertex';
