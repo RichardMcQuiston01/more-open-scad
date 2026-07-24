@@ -22,3 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `isManifold` diagnostic (`src/io/manifold-check.ts`): checks whether a `Solid` is watertight by triangulating it and verifying every directed edge occurs exactly once with its reverse-directed counterpart occurring exactly once elsewhere in the mesh, catching both holes and winding inconsistencies. Not yet part of the public API.
 - ASCII STL writer (`src/io/stl-ascii.ts`): `toASCIISTL(solid, name?)` serializes a `Solid` to the standard ASCII STL text format (`solid`/`facet normal`/`outer loop`/`vertex`/`endloop`/`endfacet`/`endsolid`) via `triangulateSolid`, with coordinates formatted as fixed-point decimals (six digits, matching float32 precision) that never fall back to scientific notation. Not yet part of the public API.
 - Binary STL writer (`src/io/stl-binary.ts`): `toBinarySTL(solid)` serializes a `Solid` to the binary STL format (80-byte header, little-endian `uint32` triangle count, then a 50-byte little-endian record per triangle — facet normal, three vertex positions, and a zero attribute byte count), built entirely on `ArrayBuffer`/`DataView` so it works in browsers. Not yet part of the public API.
+
+### Changed
+
+- Pinned `prettier` to the exact installed version (`3.9.6`, was `^3.4.2`) and reformatted the two files the version drift affected, so `bun run format` no longer produces unrelated diffs.

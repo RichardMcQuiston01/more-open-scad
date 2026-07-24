@@ -34,9 +34,7 @@ function applyMatrix(solid: Solid, matrix: Mat4Type): Solid {
         Vec3.normalize(Mat4.transformDirection(normalMatrix, v.normal)),
       ),
     );
-    return Polygon.polygon(
-      reverseWinding ? [...vertices].reverse() : vertices,
-    );
+    return Polygon.polygon(reverseWinding ? [...vertices].reverse() : vertices);
   });
   return new Solid(polygons);
 }
