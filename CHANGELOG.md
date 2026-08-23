@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- CSG plane/polygon splitting (`src/csg/split-polygon.ts`): `splitPolygon`, the geometric core of the upcoming BSP-tree boolean operations. Classifies a polygon against a plane (coplanar/front/back/spanning) and clips spanning polygons into front/back pieces, preserving winding. Not yet part of the public API — later CSG stages (BSP tree, union/difference/intersect) build on this.
+
 ## [0.1.0] - 2026-07-24
 
 The first published release: primitives, transforms, and STL export.
