@@ -8,6 +8,37 @@ MoreOpenSCAD is a framework-agnostic TypeScript package for generating STL files
 
 ## Status
 
-This repository currently contains only project scaffolding (README, LICENSE, .gitignore) — no source code, `package.json`, or build tooling exists yet. There are no build, lint, or test commands to document until the package is initialized.
+The package is `@richardmcquiston01/more-open-scad` (currently `0.1.0` in `package.json`, not yet published to npm). Primitives, transforms, STL export, and CSG boolean operations (`union`/`difference`/`intersect`) are all implemented. A tag-triggered npm publish workflow exists (`.github/workflows/publish.yml`, fires on `v*.*.*` tags on `main`) but no release has been tagged yet.
 
-When initializing this project, use `bun` (not `npm`) per the user's global tooling preference.
+Use `bun` (not `npm`) for all tooling per the user's global tooling preference.
+
+## Commands
+
+- `bun install` — install dependencies
+- `bun run typecheck` — `tsc --noEmit`
+- `bun run lint` — ESLint over the whole repo (`bun run lint:file <path>` for a single file)
+- `bun run format` — Prettier, writes in place
+- `bun test` — run the test suite (co-located `*.test.ts` files; `bun test <path>` for a single file)
+- `bun run build` — `build:js` (bundles `src/index.ts` to `dist/` via `bun build`) then `build:types` (emits `.d.ts` via `tsc`)
+
+CI (`.github/workflows/`) runs typecheck, lint, test, and build on PRs into `dev`, `staging`, `release`, and `main`.
+
+## Structure
+
+- `src/math/` — `Vec3`, `Mat4`, and epsilon-based float comparison
+- `src/geometry/` — `Vertex`, `Polygon`, `Plane`, `Solid`, and mesh triangulation
+- `src/csg/` — boolean operations (`union`/`difference`/`intersect`) on top of a BSP tree (`bsp-tree.ts`) and plane/polygon splitting (`split-polygon.ts`); only `boolean.ts`'s exports are public
+- `src/primitives/` — `cube`, `sphere`, `cylinder`, `polyhedron`
+- `src/io/` — STL export (`stl-binary`, `stl-ascii`), `triangulateSolid`, `isManifold`
+- `src/testing/` — shared test assertion helpers
+- `src/index.ts` — the public barrel export
+
+## Resources
+
+OpenSCAD concepts this library is modeled after:
+
+- <https://openscad.org/documentation.html>
+- <https://openscad.org/documentation-articles.html#makerbot-blog>
+- <https://en.wikibooks.org/wiki/OpenSCAD_User_Manual>
+- <https://en.wikipedia.org/wiki/STL_(file_format)>
+- <https://threejs.org/docs/#STLExporter>

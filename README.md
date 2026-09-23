@@ -39,6 +39,21 @@ const stl = toBinarySTL(shape); // Uint8Array
 
 Every `Solid` has chainable, immutable transform methods: `translate`, `rotate` (Euler angles), `rotateAxisAngle`, `scale` (uniform or per-axis), `mirror`, and `multmatrix` (an arbitrary 4x4 transform, for anything the named methods don't cover). Each call returns a new `Solid` — none of them mutate the original.
 
+### Boolean operations
+
+`union(a, b)`, `difference(a, b)`, and `intersect(a, b)` combine two solids into a new one, matching OpenSCAD's `union()`/`difference()`/`intersection()`:
+
+```ts
+import { cube, difference, Vec3 } from '@richardmcquiston01/more-open-scad';
+
+const block = cube(20, { center: true });
+const hole = cube(8, { center: true }).translate(Vec3.vec3(0, 0, 6));
+
+const blockWithHole = difference(block, hole);
+```
+
+Neither input `Solid` is mutated; each call returns a new one. Combine more than two solids by chaining calls, e.g. `union(union(a, b), c)`.
+
 ### Exporting to STL
 
 `toBinarySTL(solid)` returns a `Uint8Array` (the binary STL format); `toASCIISTL(solid, name?)` returns a `string` (the ASCII STL format). Neither writes to disk — this package stays framework-agnostic by handing back bytes/text and leaving file I/O to you:
@@ -69,20 +84,6 @@ URL.revokeObjectURL(url);
 
 Before exporting, `isManifold(solid)` checks whether a `Solid` is watertight (every edge shared by exactly two triangles wound in opposite directions) — useful as a sanity check that geometry is 3D-print-ready.
 
-See [Resources](#resources) below for the OpenSCAD concepts this library is modeled after.
-
-## Support
-
-If this library saved you some reverse-engineering, consider [buying me a coffee](https://www.paypal.com/ncp/payment/VDTESHTRR7684). ☕
-
-## Resources
-
-- <https://openscad.org/documentation.html>
-- <https://openscad.org/documentation-articles.html#makerbot-blog>
-- <https://en.wikibooks.org/wiki/OpenSCAD_User_Manual>
-- <https://en.wikipedia.org/wiki/STL_(file_format)>
-- <https://threejs.org/docs/#STLExporter>
-
 ## License
 
 [MIT](LICENSE)
@@ -90,3 +91,11 @@ If this library saved you some reverse-engineering, consider [buying me a coffee
 ## Copyright
 
 (c) 2026 Richard McQuiston.
+
+## Buy Me a Coffee
+
+If this app, code, or repository has helped you or someone you know, please consider donating. I appreciate any help to offset the costs of development and/or AI Credits.
+
+[**Donate via Stripe**](https://donate.stripe.com/00w5kD3Gj1Xo9v7gVOcs800), or scan:
+
+[![Donate via Stripe](./donate.svg)](https://donate.stripe.com/00w5kD3Gj1Xo9v7gVOcs800)

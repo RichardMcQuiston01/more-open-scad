@@ -15,6 +15,10 @@ export * as Vertex from './geometry/vertex';
 export * as Polygon from './geometry/polygon';
 export * as Plane from './geometry/plane';
 
+// CSG — boolean combinations of solids, matching OpenSCAD's
+// union()/difference()/intersection().
+export { union, difference, intersect } from './csg/boolean';
+
 // Math — Vec3/Mat4, needed to call the primitives/transforms above and
 // useful standalone for consumers doing their own geometry work.
 export * as Vec3 from './math/vec3';
