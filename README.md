@@ -69,20 +69,6 @@ URL.revokeObjectURL(url);
 
 Before exporting, `isManifold(solid)` checks whether a `Solid` is watertight (every edge shared by exactly two triangles wound in opposite directions) — useful as a sanity check that geometry is 3D-print-ready.
 
-See [Resources](#resources) below for the OpenSCAD concepts this library is modeled after.
-
-## Support
-
-If this library saved you some reverse-engineering, consider [buying me a coffee](https://www.paypal.com/ncp/payment/VDTESHTRR7684). ☕
-
-## Resources
-
-- <https://openscad.org/documentation.html>
-- <https://openscad.org/documentation-articles.html#makerbot-blog>
-- <https://en.wikibooks.org/wiki/OpenSCAD_User_Manual>
-- <https://en.wikipedia.org/wiki/STL_(file_format)>
-- <https://threejs.org/docs/#STLExporter>
-
 ## License
 
 [MIT](LICENSE)
@@ -90,3 +76,11 @@ If this library saved you some reverse-engineering, consider [buying me a coffee
 ## Copyright
 
 (c) 2026 Richard McQuiston.
+
+## Buy Me a Coffee
+
+If this app, code, or repository has helped you or someone you know, please consider donating. I appreciate any help to offset the costs of development and/or AI Credits.
+
+[**Donate via Stripe**](https://donate.stripe.com/00w5kD3Gj1Xo9v7gVOcs800), or scan:
+
+[![Donate via Stripe](./donate.svg)](https://donate.stripe.com/00w5kD3Gj1Xo9v7gVOcs800)
