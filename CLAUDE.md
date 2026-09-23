@@ -8,7 +8,7 @@ MoreOpenSCAD is a framework-agnostic TypeScript package for generating STL files
 
 ## Status
 
-The package is initialized and published as `@richardmcquiston01/more-open-scad` (currently `0.1.0`). Primitives, transforms, and STL export are implemented; CSG boolean operations (union/difference/intersect) are in progress — `splitPolygon` (plane/polygon splitting) is the first landed piece, not yet part of the public API.
+The package is `@richardmcquiston01/more-open-scad` (currently `0.1.0` in `package.json`, not yet published to npm). Primitives, transforms, STL export, and CSG boolean operations (`union`/`difference`/`intersect`) are all implemented. A tag-triggered npm publish workflow exists (`.github/workflows/publish.yml`, fires on `v*.*.*` tags on `main`) but no release has been tagged yet.
 
 Use `bun` (not `npm`) for all tooling per the user's global tooling preference.
 
@@ -27,7 +27,7 @@ CI (`.github/workflows/`) runs typecheck, lint, test, and build on PRs into `dev
 
 - `src/math/` — `Vec3`, `Mat4`, and epsilon-based float comparison
 - `src/geometry/` — `Vertex`, `Polygon`, `Plane`, `Solid`, and mesh triangulation
-- `src/csg/` — BSP-tree boolean operations (in progress; `splitPolygon` so far)
+- `src/csg/` — boolean operations (`union`/`difference`/`intersect`) on top of a BSP tree (`bsp-tree.ts`) and plane/polygon splitting (`split-polygon.ts`); only `boolean.ts`'s exports are public
 - `src/primitives/` — `cube`, `sphere`, `cylinder`, `polyhedron`
 - `src/io/` — STL export (`stl-binary`, `stl-ascii`), `triangulateSolid`, `isManifold`
 - `src/testing/` — shared test assertion helpers

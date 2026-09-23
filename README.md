@@ -39,6 +39,21 @@ const stl = toBinarySTL(shape); // Uint8Array
 
 Every `Solid` has chainable, immutable transform methods: `translate`, `rotate` (Euler angles), `rotateAxisAngle`, `scale` (uniform or per-axis), `mirror`, and `multmatrix` (an arbitrary 4x4 transform, for anything the named methods don't cover). Each call returns a new `Solid` — none of them mutate the original.
 
+### Boolean operations
+
+`union(a, b)`, `difference(a, b)`, and `intersect(a, b)` combine two solids into a new one, matching OpenSCAD's `union()`/`difference()`/`intersection()`:
+
+```ts
+import { cube, difference, Vec3 } from '@richardmcquiston01/more-open-scad';
+
+const block = cube(20, { center: true });
+const hole = cube(8, { center: true }).translate(Vec3.vec3(0, 0, 6));
+
+const blockWithHole = difference(block, hole);
+```
+
+Neither input `Solid` is mutated; each call returns a new one. Combine more than two solids by chaining calls, e.g. `union(union(a, b), c)`.
+
 ### Exporting to STL
 
 `toBinarySTL(solid)` returns a `Uint8Array` (the binary STL format); `toASCIISTL(solid, name?)` returns a `string` (the ASCII STL format). Neither writes to disk — this package stays framework-agnostic by handing back bytes/text and leaving file I/O to you:

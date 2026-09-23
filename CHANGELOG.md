@@ -8,7 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- CSG plane/polygon splitting (`src/csg/split-polygon.ts`): `splitPolygon`, the geometric core of the upcoming BSP-tree boolean operations. Classifies a polygon against a plane (coplanar/front/back/spanning) and clips spanning polygons into front/back pieces, preserving winding. Not yet part of the public API — later CSG stages (BSP tree, union/difference/intersect) build on this.
+- CSG plane/polygon splitting (`src/csg/split-polygon.ts`): `splitPolygon`, the geometric core of the BSP-tree boolean operations below. Classifies a polygon against a plane (coplanar/front/back/spanning) and clips spanning polygons into front/back pieces, preserving winding. Not part of the public API.
+- CSG BSP tree (`src/csg/bsp-tree.ts`): the classic Naylor/Thibault BSP-CSG tree (as popularized by csg.js), built on `splitPolygon` and adapted to this codebase's immutable conventions — `build`, `clipPolygons`, `clipTo`, `invert`, and `allPolygons` all return new trees rather than mutating one. Not part of the public API; `src/csg/boolean.ts` is the only consumer.
+- CSG boolean operations: `union`, `difference`, and `intersect`, matching OpenSCAD's `union()`/`difference()`/`intersection()`. Each takes two `Solid`s and returns a new one; chain calls to combine more than two (`union(union(a, b), c)`).
 
 ## [0.1.0] - 2026-07-24
 
