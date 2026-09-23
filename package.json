@@ -48,7 +48,8 @@
     "test:file": "bun test",
     "build:js": "bun build src/index.ts --outdir dist --target browser --format esm",
     "build:types": "tsc --project tsconfig.build.json --emitDeclarationOnly",
-    "build": "bun run build:js && bun run build:types"
+    "build": "bun run build:js && bun run build:types",
+    "prepublishOnly": "bun run build"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
