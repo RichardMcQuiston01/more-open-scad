@@ -8,7 +8,7 @@ MoreOpenSCAD is a framework-agnostic TypeScript package for generating STL files
 
 ## Status
 
-The package is `@richardmcquiston01/more-open-scad` (currently `0.1.0` in `package.json`, not yet published to npm). Primitives, transforms, STL export, and CSG boolean operations (`union`/`difference`/`intersect`) are all implemented. A tag-triggered npm publish workflow exists (`.github/workflows/publish.yml`, fires on `v*.*.*` tags on `main`) but no release has been tagged yet.
+The package is `@richardmcquiston01/more-open-scad`, currently `0.2.0` — the first version published to npm. Primitives, transforms, STL export, and CSG boolean operations (`union`/`difference`/`intersect`) are all implemented. A tag-triggered npm publish workflow (`.github/workflows/publish.yml`) fires on `v*.*.*` tags pushed to `main`.
 
 Use `bun` (not `npm`) for all tooling per the user's global tooling preference.
 
