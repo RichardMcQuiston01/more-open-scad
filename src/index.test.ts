@@ -2,6 +2,8 @@ import { describe, expect, test } from 'bun:test';
 import {
   cube,
   cylinder,
+  difference,
+  intersect,
   isManifold,
   Mat4,
   Plane,
@@ -12,6 +14,7 @@ import {
   toASCIISTL,
   toBinarySTL,
   triangulateSolid,
+  union,
   Vec3,
   Vertex,
 } from './index';
@@ -38,6 +41,12 @@ describe('public API surface', () => {
     expect(typeof toASCIISTL).toBe('function');
     expect(typeof isManifold).toBe('function');
     expect(typeof triangulateSolid).toBe('function');
+  });
+
+  test('exports the CSG boolean operations', () => {
+    expect(typeof union).toBe('function');
+    expect(typeof difference).toBe('function');
+    expect(typeof intersect).toBe('function');
   });
 });
 
@@ -75,5 +84,15 @@ describe('end-to-end: primitive -> transform -> STL export', () => {
     );
     expect(isManifold(shape)).toBe(true);
     expect(toASCIISTL(shape).startsWith('solid')).toBe(true);
+  });
+
+  test('combines two cubes with union/difference/intersect and exports valid STL', () => {
+    const a = cube(2, { center: true });
+    const b = cube(2, { center: true }).translate(Vec3.vec3(1, 0, 0));
+
+    for (const shape of [union(a, b), difference(a, b), intersect(a, b)]) {
+      expect(isManifold(shape)).toBe(true);
+      expect(toASCIISTL(shape).startsWith('solid')).toBe(true);
+    }
   });
 });
