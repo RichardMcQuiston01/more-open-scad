@@ -4,17 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [0.2.0] - 2026-09-23
+
+The first version actually published to npm.
 
 ### Added
 
 - CSG plane/polygon splitting (`src/csg/split-polygon.ts`): `splitPolygon`, the geometric core of the BSP-tree boolean operations below. Classifies a polygon against a plane (coplanar/front/back/spanning) and clips spanning polygons into front/back pieces, preserving winding. Not part of the public API.
 - CSG BSP tree (`src/csg/bsp-tree.ts`): the classic Naylor/Thibault BSP-CSG tree (as popularized by csg.js), built on `splitPolygon` and adapted to this codebase's immutable conventions — `build`, `clipPolygons`, `clipTo`, `invert`, and `allPolygons` all return new trees rather than mutating one. Not part of the public API; `src/csg/boolean.ts` is the only consumer.
 - CSG boolean operations: `union`, `difference`, and `intersect`, matching OpenSCAD's `union()`/`difference()`/`intersection()`. Each takes two `Solid`s and returns a new one; chain calls to combine more than two (`union(union(a, b), c)`).
+- A tag-triggered npm publish workflow (`.github/workflows/publish.yml`): pushing a `v*.*.*` tag on `main` re-verifies typecheck/lint/test/build, then publishes.
+- The standard "Buy Me a Coffee" donate section in the README.
 
 ## [0.1.0] - 2026-07-24
 
-The first published release: primitives, transforms, and STL export.
+Primitives, transforms, and STL export. Never published to npm — superseded by 0.2.0 before a release was cut.
 
 ### Added
 
