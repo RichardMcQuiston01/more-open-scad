@@ -1,6 +1,6 @@
 {
   "name": "@richardmcquiston01/more-open-scad",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Framework agnostic TypeScript based package for generating STL files using commands similar to OpenSCAD.",
   "type": "module",
   "license": "MIT",
@@ -15,6 +15,10 @@
   "homepage": "https://github.com/RichardMcQuiston01/more-open-scad#readme",
   "bugs": {
     "url": "https://github.com/RichardMcQuiston01/more-open-scad/issues"
+  },
+  "funding": {
+    "type": "individual",
+    "url": "https://donate.stripe.com/00w5kD3Gj1Xo9v7gVOcs800"
   },
   "keywords": [
     "openscad",
