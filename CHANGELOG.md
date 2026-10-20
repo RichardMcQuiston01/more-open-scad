@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.2.1] - 2026-10-20
+
+### Added
+
+- A `funding` entry in `package.json` pointing at the Stripe donate link, so `npm fund` and the npm registry page surface it.
+
 ## [0.2.0] - 2026-09-23
 
 The first version actually published to npm.
