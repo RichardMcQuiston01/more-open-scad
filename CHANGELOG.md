@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.2.2] - 2026-11-03
+
+### Changed
+
+- No code changes. Donate links and the `funding` entry now point to PayPal, and the README donate QR image is 180 px wide.
+
 ## [0.2.1] - 2026-10-20
 
 ### Added
